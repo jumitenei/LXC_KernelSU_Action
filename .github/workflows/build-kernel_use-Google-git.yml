@@ -115,11 +115,11 @@ jobs:
         cat arch/arm64/configs/ares_defconfig
         SUSFS_BRANCH=kernel-4.14
         git clone --recursive -j $(nproc) --branch $SUSFS_BRANCH https://github.com/devnoname120/susfs4ksu-toco SUSFS
-       cp SUSFS/kernel_patches/fs/* fs/
-       cp SUSFS/kernel_patches/include/linux/* include/linux/
-       patch -d KernelSU-Next -p1 --verbose < SUSFS/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch
-       patch -p1 --verbose < SUSFS/kernel_patches/40_ksu_without_kprobes.patch
-       patch -p1 --verbose < SUSFS/kernel_patches/50_add_susfs_in_kernel-4.14.patch
+        cp SUSFS/kernel_patches/fs/* fs/
+        cp SUSFS/kernel_patches/include/linux/* include/linux/
+        patch -d KernelSU-Next -p1 --verbose < SUSFS/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch
+        patch -p1 --verbose < SUSFS/kernel_patches/40_ksu_without_kprobes.patch
+        patch -p1 --verbose < SUSFS/kernel_patches/50_add_susfs_in_kernel-4.14.patch
         echo "UPLOADNAME=-KernelSU" >> $GITHUB_ENV
 
     - name: Setup Configuration for Kernel
