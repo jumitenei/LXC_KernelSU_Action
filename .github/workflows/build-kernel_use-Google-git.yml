@@ -113,13 +113,19 @@ jobs:
         rm -rf KernelSU
         git clone --recursive -j $(nproc) --branch next https://github.com/rifsxd/KernelSU-Next KernelSU
         cat arch/arm64/configs/ares_defconfig
-        SUSFS_BRANCH=next-4.14
-        git clone --recursive -j $(nproc) --branch $SUSFS_BRANCH https://github.com/cvnertnc/susfs4ksu-begonia SUSFS
-        patch -p1 < SUSFS/kernel_patches/0001-fs-implement-KernelSU.patch
-        cp -v SUSFS/kernel_patches/fs/* fs/
-        cp -v SUSFS/kernel_patches/include/linux/* include/linux/
-        patch -d KernelSU -p1 < SUSFS/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch
-        patch -p1 < SUSFS/kernel_patches/50_add_susfs_in_kernel-4.14.patch
+        SUSFS_BRANCH=kernel-4.14
+        git clone --recursive -j $(nproc) --branch $SUSFS_BRANCH https://github.com/devnoname120/susfs4ksu-toco SUSFS
+        
+       SUSFS_VERSION=$(grep -oP '^\s*#define\s+SUSFS_VERSION\s+"\K[^"]+' SUSFS/kernel_patches/include/linux/susfs.h)
+       echo -e "SUSFS_VERSION=$SUSFS_VERSION" >> $GITHUB_OUTPUT
+       echo -e "\n💡 SUSFS version: $SUSFS_VERSION\n"
+       SUSFS_REF=$(git -C SUSFS rev-parse --short HEAD)
+       echo -e "SUSFS_REF=$SUSFS_REF" >> $GITHUB_OUTPUT
+       cp SUSFS/kernel_patches/fs/* fs/
+       cp SUSFS/kernel_patches/include/linux/* include/linux/
+       patch -d KernelSU-Next -p1 --verbose < SUSFS/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch
+       patch -p1 --verbose < SUSFS/kernel_patches/40_ksu_without_kprobes.patch
+       patch -p1 --verbose < SUSFS/kernel_patches/50_add_susfs_in_kernel-4.14.patch
         echo "UPLOADNAME=-KernelSU" >> $GITHUB_ENV
 
     - name: Setup Configuration for Kernel
