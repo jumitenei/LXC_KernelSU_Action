@@ -116,7 +116,7 @@ jobs:
         SUSFS_BRANCH=kernel-4.14
         git clone --recursive -j $(nproc) --branch $SUSFS_BRANCH https://gitlab.com/simonpunk/susfs4ksu SUSFS
         cp ./SUSFS/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch $GITHUB_WORKSPACE/kernel_workspace/android-kernel/KernelSU/
-        cp ./SUSFS/kernel_patches/50_add_susfs_in_kernel-<kernel_version>.patch $GITHUB_WORKSPACE/kernel_workspace/android-kernel/
+        cp ./SUSFS/kernel_patches/50_add_susfs_in_kernel-4.14.patch $GITHUB_WORKSPACE/kernel_workspace/android-kernel/
         cp ./SUSFS/kernel_patches/fs/* $GITHUB_WORKSPACE/kernel_workspace/android-kernel/fs/
         cp ./SUSFS/kernel_patches/include/linux/* $GITHUB_WORKSPACE/kernel_workspace/android-kernel/include/linux/
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel/KernelSU
