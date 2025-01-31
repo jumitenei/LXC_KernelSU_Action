@@ -109,8 +109,20 @@ jobs:
       if: env.ENABLE_KERNELSU == 'true'
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
+        curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
         rm -rf KernelSU
-        curl -LSs "https://raw.githubusercontent.com/rifsxd/KernelSU-Next/next/kernel/setup.sh" | bash -
+        git clone --recursive -j $(nproc) --branch next https://github.com/rifsxd/KernelSU-Next KernelSU
+        cat arch/arm64/configs/ares_defconfig
+        SUSFS_BRANCH=kernel-4.14
+        git clone --recursive -j $(nproc) --branch $SUSFS_BRANCH https://gitlab.com/simonpunk/susfs4ksu SUSFS
+        cp ./kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch $GITHUB_WORKSPACE/kernel_workspace/android-kernel/KernelSU/
+        cp ./kernel_patches/50_add_susfs_in_kernel-<kernel_version>.patch $GITHUB_WORKSPACE/kernel_workspace/android-kernel/
+        cp ./kernel_patches/fs/* $GITHUB_WORKSPACE/kernel_workspace/android-kernel/fs/
+        cp ./kernel_patches/include/linux/* $GITHUB_WORKSPACE/kernel_workspace/android-kernel/include/linux/
+        cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel/KernelSU
+        patch -p1 < 10_enable_susfs_for_ksu.patch
+        cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
+        patch -p1 < 50_add_susfs_in_kernel.patch
         echo "UPLOADNAME=-KernelSU" >> $GITHUB_ENV
 
     - name: Setup Configuration for Kernel
