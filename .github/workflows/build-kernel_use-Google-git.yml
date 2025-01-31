@@ -113,16 +113,13 @@ jobs:
         rm -rf KernelSU
         git clone --recursive -j $(nproc) --branch next https://github.com/rifsxd/KernelSU-Next KernelSU
         cat arch/arm64/configs/ares_defconfig
-        SUSFS_BRANCH=kernel-4.14
-        git clone --recursive -j $(nproc) --branch $SUSFS_BRANCH https://gitlab.com/simonpunk/susfs4ksu SUSFS
-        cp ./SUSFS/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch $GITHUB_WORKSPACE/kernel_workspace/android-kernel/KernelSU/
-        cp ./SUSFS/kernel_patches/50_add_susfs_in_kernel-4.14.patch $GITHUB_WORKSPACE/kernel_workspace/android-kernel/
-        cp ./SUSFS/kernel_patches/fs/* $GITHUB_WORKSPACE/kernel_workspace/android-kernel/fs/
-        cp ./SUSFS/kernel_patches/include/linux/* $GITHUB_WORKSPACE/kernel_workspace/android-kernel/include/linux/
-        cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel/KernelSU
-        patch -p1 < 10_enable_susfs_for_ksu.patch
-        cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
-        patch -p1 < 50_add_susfs_in_kernel.patch
+        SUSFS_BRANCH=next-4.14
+        git clone --recursive -j $(nproc) --branch $SUSFS_BRANCH https://github.com/cvnertnc/susfs4ksu-begonia SUSFS
+        patch -p1 < SUSFS/kernel_patches/0001-fs-implement-KernelSU.patch
+        cp -v SUSFS/kernel_patches/fs/* fs/
+        cp -v SUSFS/kernel_patches/include/linux/* include/linux/
+        patch -d KernelSU -p1 < SUSFS/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch
+        patch -p1 < SUSFS/kernel_patches/50_add_susfs_in_kernel-4.14.patch
         echo "UPLOADNAME=-KernelSU" >> $GITHUB_ENV
 
     - name: Setup Configuration for Kernel
