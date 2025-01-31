@@ -115,12 +115,6 @@ jobs:
         cat arch/arm64/configs/ares_defconfig
         SUSFS_BRANCH=kernel-4.14
         git clone --recursive -j $(nproc) --branch $SUSFS_BRANCH https://github.com/devnoname120/susfs4ksu-toco SUSFS
-        
-       SUSFS_VERSION=$(grep -oP '^\s*#define\s+SUSFS_VERSION\s+"\K[^"]+' SUSFS/kernel_patches/include/linux/susfs.h)
-       echo -e "SUSFS_VERSION=$SUSFS_VERSION" >> $GITHUB_OUTPUT
-       echo -e "\n💡 SUSFS version: $SUSFS_VERSION\n"
-       SUSFS_REF=$(git -C SUSFS rev-parse --short HEAD)
-       echo -e "SUSFS_REF=$SUSFS_REF" >> $GITHUB_OUTPUT
        cp SUSFS/kernel_patches/fs/* fs/
        cp SUSFS/kernel_patches/include/linux/* include/linux/
        patch -d KernelSU-Next -p1 --verbose < SUSFS/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch
