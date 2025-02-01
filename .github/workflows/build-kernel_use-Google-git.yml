@@ -92,9 +92,6 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace
         git clone ${{ env.KERNEL_SOURCE }} -b ${{ env.KERNEL_SOURCE_BRANCH }} android-kernel --depth=1
-        git clone https://github.com/jumitenei/android_kernel_modules_oppo_mtk5g/
-        cp android_kernel_modules_oppo_mtk5g/vendor ./ -R
-
     - name: Download source boot image
       if: env.BUILD_BOOT_IMG == 'true'
       run: |
