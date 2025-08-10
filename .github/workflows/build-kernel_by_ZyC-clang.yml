@@ -78,7 +78,7 @@ jobs:
         mkdir zyc-clang
         if [ ${{ env.ZYC_CLANG_VERSION }} = 22 ]; then
              wget -O clang22.tar.gz https://github.com/ZyCromerZ/Clang/releases/download/22.0.0git-20250805-release/Clang-22.0.0git-20250805.tar.gz
-             tar -C zyc-clang/ -xf clang20.tar.gz
+             tar -C zyc-clang/ -xf clang22.tar.gz
         fi
 
 
